@@ -6,6 +6,10 @@
 
 #PBS -A open
 
+#PBS -m abe
+
+#PBS -M tobias.gerken@psu.edu
+
 # Get started
 
 echo "Job started on ‘hostname‘ at ‘date‘"
