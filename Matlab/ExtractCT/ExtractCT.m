@@ -14,6 +14,8 @@ Elevation = [60,275, 234, 300, 272 , ...
              260, 272, 260, 472, 314];
 
 DataDir =  'D:\OneDrive - The Pennsylvania State University\Projects\ACT-America\Data\CarbonTracker_2017'       ;
+DataDir = '~/scratch/three-hourly/';
+WorkDir = '~/scratch/RubiscoWS/Matlab/ExtractCT' ; 
 
 Vars ={'bio_flux_opt','ocn_flux_opt','fossil_flux_imp','fire_flux_imp'}; 
 
@@ -25,12 +27,12 @@ SDay = datenum(2000,01,01);
 EDay = datenum(2017,02,19);
 EDay = datenum(2018,01,01);
 
-cd(DataDir)
+cd(WorkDir)
 
 for day = SDay:EDay
    DStr = datestr(day,'yyyymmdd') ;
    
-   FName = ['CT2017.flux1x1.' DStr '.nc'];
+   FName = [DataDir 'CT2017.flux1x1.' DStr '.nc'];
    
    Lats = ncread(FName,'latitude');
    Lons = ncread(FName,'longitude');
