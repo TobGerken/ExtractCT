@@ -13,9 +13,13 @@ Elevation = [60,275, 234, 300, 272 , ...
              1596, 1604, 3030, 1931, 300, 2196, NaN, ...
              260, 272, 260, 472, 314];
 
-DataDir =  'D:\OneDrive - The Pennsylvania State University\Projects\ACT-America\Data\CarbonTracker_2017'       ;
-DataDir = '~/scratch/three-hourly/';
-WorkDir = '~/scratch/RubiscoWS/Matlab/ExtractCT' ; 
+if ispc 
+   DataDir =  'D:\OneDrive - The Pennsylvania State University\Projects\ACT-America\Data\CarbonTracker_2017\'       ; 
+   WorkDir = 'D:\OneDrive - The Pennsylvania State University\Projects\ACT-America\Code\RubiscoWS\Matlab\ExtractCT\';
+elseif isunix
+    WorkDir = '~/scratch/RubiscoWS/Matlab/ExtractCT/' ; 
+    DataDir = '~/scratch/three-hourly/';
+end
 
 Vars ={'bio_flux_opt','ocn_flux_opt','fossil_flux_imp','fire_flux_imp'}; 
 
@@ -25,21 +29,24 @@ clobber = true ;
 
 SDay = datenum(2000,01,01);
 EDay = datenum(2017,02,19);
-EDay = datenum(2018,01,01);
+EDay = datenum(2000,01,02);
 
 cd(WorkDir)
 
 for day = SDay:EDay
    DStr = datestr(day,'yyyymmdd') ;
+   disp(DStr) 
    
    FName = [DataDir 'CT2017.flux1x1.' DStr '.nc'];
    
-   Lats = ncread(FName,'latitude');
-   Lons = ncread(FName,'longitude');
+
    DecTime = ncread(FName,'decimal_time');
-   UTC = ncread(FName,'time');
+   
    
    if init 
+      Lats = ncread(FName,'latitude');
+      Lons = ncread(FName,'longitude'); 
+      UTC = ncread(FName,'time')*24;
       % get closest index for each site    
       for s= 1:length(sites)
             SiteStruct.(sites{s}).Lat = LatLon{s}(1);
@@ -58,7 +65,7 @@ for day = SDay:EDay
             
             if clobber 
                % Prep Output files
-               header = 'Year, Month, Day, UTC, ' ;
+               header = 'Year, Month, Day, UTC' ;
                for v = Vars
                     header =strcat(header, [', ' v{1}]);
                end  
@@ -105,11 +112,11 @@ for day = SDay:EDay
     for s = 1:length(sites)
          FNameOut = ['CT2017_' sites{s} '.csv'];
          
-         N = nan(8,9);
+         N = nan(8,8);
          N(:,1) = Year;
          N(:,2) = Month;
          N(:,3) = Day;
-         N(:,4) = UTC*24;
+         N(:,4) = UTC;
          
          for v = 1:length(Vars)
              N(:,4+v) = OutSite.(Vars{v}) ;
