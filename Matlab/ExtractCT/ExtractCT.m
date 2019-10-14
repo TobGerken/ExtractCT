@@ -29,7 +29,7 @@ clobber = true ;
 
 SDay = datenum(2000,01,01);
 EDay = datenum(2017,02,19);
-EDay = datenum(2000,01,02);
+EDay = datenum(2000,12,31) ;
 
 cd(WorkDir)
 
